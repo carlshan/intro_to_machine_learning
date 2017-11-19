@@ -190,8 +190,8 @@ Okay, so for a given set of weights we can calculate how "good" they are in our 
 Now let's figure out a smart way to update our weights.
 
 ### Randomly Searching
-The below is from [Kevin Fran's post on "Simple Algorithms for Solving Cartpole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)
-
+*The below is from [Kevin Fran's post on "Simple Algorithms for Solving Cartpole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)
+*
 > One fairly straightforward strategy is to keep trying random weights, and pick the one that performs the best.
 > 
 > ```python
@@ -215,5 +215,16 @@ The below is from [Kevin Fran's post on "Simple Algorithms for Solving Cartpole]
 > ![Random Search](http://kvfrans.com/content/images/2016/07/cartpole-random-1.png)
 > 
 > I ran the random search method 1,000 times, keeping track of how many episodes it took until the agent kept the pole up for 200 timesteps. On average, it took 13.53 episodes.
+
+### Now What?
+Okay, so that's how we can find the "best weights" when we're just searching randomly through the space of all possible weights? 
+
+Take a look at [Kevin Fran's tutorial](http://kvfrans.com/simple-algoritms-for-solving-cartpole/) and implement some of the other solutions.
+
+For this assignment, Submit your code and a writeup that responds to the following questions:
+
+* Explain in your own words how the Hill-Climbing or Policy Gradient solutions are similar or different from the Random Search solution I show in my tutorial.
+* What are some advantages and disadvantages to these other ways of searching for weights?
+
 
 
