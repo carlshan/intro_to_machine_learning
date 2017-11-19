@@ -13,5 +13,6 @@ for episode in range(NUM_EPISODES):
         print(observation)
         action = environment.action_space.sample() # this is a 1 or 0
         observation, reward, done, info = environment.step(action)
+        pos, veloc, angle, ang_veloc = observation
         if done:
             break
