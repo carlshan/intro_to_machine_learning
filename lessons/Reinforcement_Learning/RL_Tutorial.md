@@ -51,6 +51,7 @@ python3 cartpole_rl.py
 You should see this the CartPole game pop up on your screen:
 
 ![CartPole](https://keon.io/images/deep-q-learning/animation.gif)
+
 *Source: https://keon.io/deep-q-learning*
 
 Now let's get build up an increasingly sophisticated method of playing this game.
@@ -79,19 +80,20 @@ However, before we dive deeper, it's important to understand that the `environme
 
 [OpenAI's description](https://gym.openai.com/docs/) of the values that are returned are below:
 
+-----------
+
 > ### **Observations**
-
+>
 > If we ever want to do better than take random actions at each step, it'd probably be good to actually know what our actions are doing to the environment.
-
 > The environment's `step` function returns exactly what we need. In fact, `step` returns four values. These are:
-
+>
 > 1. `observation` (**object**): an environment-specific object representing your observation of the environment. For example, pixel data from a camera, joint angles and joint velocities of a robot, or the board state in a board game.
 > 2. `reward` (**float**): amount of reward achieved by the previous action. The scale varies between environments, but the goal is always to increase your total reward.
 >  3. `done` (**boolean**): whether it's time to `reset` the environment again.  Most (but not all) tasks are divided up into well-defined episodes, and `done` being `True` indicates the episode has terminated. (For example, perhaps the pole tipped too far, or you lost your last life.)
 > 4. `info` (**dict**): diagnostic information useful for debugging. It can sometimes be useful for learning (for example, it might contain the raw probabilities behind the environment's last state change). However, official evaluations of your agent are not allowed to use this for learning.
-
+>
 > This is just an implementation of the classic "agent-environment loop". Each timestep, the agent chooses an `action`, and the environment returns an `observation` and a `reward`.
-
-![RL Process](https://gym.openai.com/assets/docs/aeloop-138c89d44114492fd02822303e6b4b07213010bb14ca5856d2d49d6b62d88e53.svg)
-
+>
+> ![RL Process](https://gym.openai.com/assets/docs/aeloop-138c89d44114492fd02822303e6b4b07213010bb14ca5856d2d49d6b62d88e53.svg)
+>
 > The process gets started by calling `reset`, which returns an `initial` observation.
