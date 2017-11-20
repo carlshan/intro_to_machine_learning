@@ -1,6 +1,5 @@
 import gym
 import numpy as np
-import matplotlib.pyplot as plt
 
 environment = gym.make('CartPole-v0')
 environment.reset()

@@ -190,8 +190,8 @@ Okay, so for a given set of weights we can calculate how "good" they are in our 
 Now let's figure out a smart way to update our weights.
 
 ### Randomly Searching
-*The below is from [Kevin Fran's post on "Simple Algorithms for Solving Cartpole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)
-*
+*The below is from [Kevin Fran's post on "Simple Algorithms for Solving Cartpole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)*
+
 > One fairly straightforward strategy is to keep trying random weights, and pick the one that performs the best.
 > 
 > ```python
@@ -225,7 +225,7 @@ We're going to add run our program with these weights:
 observation = environment.reset()
 cumulative_reward = 0
 
-for _ in range(0, 200):
+for step in range(0, 200):
     environment.render()
     action = determine_action(observation, best_weights)
     observation, reward, done, info = environment.step(action)
