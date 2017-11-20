@@ -26,7 +26,7 @@ We are going to get started with a very basic game called CartPole.
 
 The goal of the game is to balance a stick standing vertically on top of a cart as the cart moves around. 
 
-You can see this [video](https://gym.openai.com/docs/) on OpenAI's gym documentation for an example of what CartPole looks like.
+You can see this [link](https://gym.openai.com/docs/) on OpenAI's gym documentation for an example of what CartPole looks like.
 
 Now open your text editor and paste in the following code:
 
@@ -35,7 +35,7 @@ import gym
 
 environment = gym.make('CartPole-v0')
 environment.reset()
-for _ in range(1000):
+for step in range(1000):
     environment.render()
 
 ```
@@ -50,7 +50,7 @@ python3 cartpole_rl.py
 
 You should see this the CartPole game pop up on your screen:
 
-![CartPole](https://keon.io/images/deep-q-learning/animation.gif)
+![CartPole](https://cgnicholls.github.io/assets/CartPole.jpg)
 
 *Source: https://keon.io/deep-q-learning*
 
@@ -63,7 +63,7 @@ import gym
 
 environment = gym.make('CartPole-v0')
 environment.reset()
-for _ in range(1000):
+for step in range(1000):
     environment.render()
     random_action = environment.action_space.sample()
     print(random_action)
@@ -173,12 +173,12 @@ In order to pick "better" parameters we need to have an idea of what "better" me
 Using that let's write a function that basically tells us how much a set of weights will reward  us:
 
 ```python
-def run_episode(env, weights):  
-	observation = env.reset()
+def run_episode(environment, weights):  
+	observation = environment.reset()
 	totalreward = 0
-	for _ in range(200):
+	for step in range(200):
 		action = determine_action(observation, weights)
-		observation, reward, done, info = env.step(action)
+		observation, reward, done, info = environment.step(action)
 		totalreward += reward
 		if done:
 			break
@@ -199,9 +199,9 @@ Now let's figure out a smart way to update our weights.
 > bestreward = 0  
 > 
 > # Let's search through 10000 different random weights
-> for _ in xrange(10000):  
+> for step in xrange(10000):  
 >     weights = np.random.rand(4) * 2 - 1
->     reward = run_episode(env, weights)
+>     reward = run_episode(environment, weights)
 >     if reward > bestreward:
 >        bestreward = reward
 >        bestweights = weights
