@@ -195,16 +195,16 @@ Now let's figure out a smart way to update our weights.
 > One fairly straightforward strategy is to keep trying random weights, and pick the one that performs the best.
 > 
 > ```python
-> bestweights = None  
-> bestreward = 0  
+> best_weights = None  
+> best_reward = 0  
 > 
-> # Let's search through 10000 different random weights
-> for step in xrange(10000):  
+> # Let's search through 300 different random weights
+> for step in range(300):  
 >     weights = np.random.rand(4) * 2 - 1
 >     reward = run_episode(environment, weights)
->     if reward > bestreward:
->        bestreward = reward
->        bestweights = weights
+>     if reward > best_reward:
+>        best_reward = reward
+>        best_weights = weights
 >        # CartPole is considered solved if the agent lasts 200 timesteps
 >        if reward == 200:
 >            break
@@ -214,7 +214,111 @@ Now let's figure out a smart way to update our weights.
 > 
 > ![Random Search](http://kvfrans.com/content/images/2016/07/cartpole-random-1.png)
 > 
-> I ran the random search method 1,000 times, keeping track of how many episodes it took until the agent kept the pole up for 200 timesteps. On average, it took 13.53 episodes.
+> I ran the random search method 300 times, keeping track of how many episodes it took until the agent kept the pole up for 200 timesteps. On average, it took 13.53 episodes.
+
+### Using the best weights
+Now that we've found the best weights, let's see if these weights help us solve cartpole.
+
+We're going to add run our program with these weights:
+
+```python
+observation = environment.reset()
+cumulative_reward = 0
+
+for _ in range(0, 200):
+    environment.render()
+    action = determine_action(observation, best_weights)
+    observation, reward, done, info = environment.step(action)
+    cumulative_reward += reward
+    if done:
+        print("Reward when done: {}".format(cumulative_reward))
+        if cumulative_reward == 200:
+            print("Congrats! You successfully solved Cartpole V-0!")
+        else:
+            print("Unfortunately, even the best weights weren't enough")
+        break
+
+```
+
+I've written the entire `cartpole_rl.py` program for you below, so you can check to make sure that you're following along accurately.
+
+```python
+import gym
+import numpy as np
+
+environment = gym.make('CartPole-v0')
+environment.reset()
+
+def determine_action(observation, weights):
+    """
+        Returns 0 (go left) or 1 (go right)
+        depending on whether the weighted sum of weights * observations > 0
+    """
+    weighted_sum = np.dot(observation, weights)
+    action = 0 if weighted_sum < 0 else 1
+    return action
+
+
+def run_episode(environment, weights):
+    """
+    	This function runs one episode with a given set of weights
+    	and returns the total reward with those weights
+    """
+    observation = environment.reset()
+    total_reward = 0
+    for _ in range(200):
+        action = determine_action(observation, weights)
+        observation, reward, done, info = environment.step(action)
+        total_reward += reward
+        if done:
+            break
+    return total_reward
+
+
+def find_best_weights(num_episodes):
+    """
+        This function runs a number of episodes and picks random weights for each one and evaluates
+        the reward given by the weights.
+        It returns the weights for the best episode.
+    """
+    best_weights = None
+    best_reward = 0
+    observation = environment.reset()
+    for episode in range(num_episodes):
+        weights = np.random.rand(4) * 2 - 1
+        reward = run_episode(environment, weights)
+        if reward > best_reward:
+            best_weights = weights
+            best_reward = reward
+            print("Current Best Weights at episode #{} are {}".format(episode, best_weights))
+    return best_weights, best_reward
+
+# Now let's run 300 different weights and pick the best one (the one that gave the highest reward)
+best_weights, best_reward = find_best_weights(num_episodes=300)
+print("The best weights we've seen are: {}".format(best_weights))
+
+# Now that we've found the best weights we've seen
+# let's use our best weights to run our program
+observation = environment.reset()
+cumulative_reward = 0
+
+for step in range(0, 200):
+    environment.render()
+    action = determine_action(observation, best_weights)
+    observation, reward, done, info = environment.step(action)
+    cumulative_reward += reward
+    if done:
+        print("Reward when done: {}".format(cumulative_reward))
+        if cumulative_reward == 200:
+            print("Congrats! You successfully solved Cartpole V-0!")
+        else:
+            print("Unfortunately, even the best weights weren't enough")
+        break
+```
+
+Run the above code a few times to see if you can successfully solve CartPole-V0! 
+
+> **Note:** You may want to change the number of episodes to be higher so that you are searching over more possible weights.
 
 ### Now What?
 Okay, so that's how we can find the "best weights" when we're just searching randomly through the space of all possible weights? 
