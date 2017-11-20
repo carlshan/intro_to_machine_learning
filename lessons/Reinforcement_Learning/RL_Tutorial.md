@@ -146,8 +146,8 @@ I've written the function for you below:
 ```python
 import numpy as np
 
-def determine_action(observations, weights ):
-	action = 0 if np.dot(weghts, observation) < 0 else 1 
+def determine_action(observation, weights ):
+	action = 0 if np.dot(observation, weights) < 0 else 1 
 	return action
 ```
 
@@ -177,7 +177,7 @@ def run_episode(env, weights):
 	observation = env.reset()
 	totalreward = 0
 	for _ in range(200):
-		action = determine_action(observations, weights)
+		action = determine_action(observation, weights)
 		observation, reward, done, info = env.step(action)
 		totalreward += reward
 		if done:
