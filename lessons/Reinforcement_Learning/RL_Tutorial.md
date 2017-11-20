@@ -174,15 +174,15 @@ Using that let's write a function that basically tells us how much a set of weig
 
 ```python
 def run_episode(env, weights):  
-    observation = env.reset()
-    totalreward = 0
-    for _ in xrange(200):
-        action = determine_action(observations, weights)
-        observation, reward, done, info = env.step(action)
-        totalreward += reward
-        if done:
-            break
-    return totalreward
+	observation = env.reset()
+	totalreward = 0
+	for _ in range(200):
+		action = determine_action(observations, weights)
+		observation, reward, done, info = env.step(action)
+		totalreward += reward
+		if done:
+			break
+	return totalreward
 ```
 
 Okay, so for a given set of weights we can calculate how "good" they are in our CartPole game.
