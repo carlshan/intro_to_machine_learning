@@ -21,7 +21,7 @@ def run_episode(environment, weights):
     """
     observation = environment.reset()
     total_reward = 0
-    for _ in range(200):
+    for step in range(200):
         action = determine_action(observation, weights)
         observation, reward, done, info = environment.step(action)
         total_reward += reward

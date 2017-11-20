@@ -54,7 +54,12 @@ You should see this the CartPole game pop up on your screen:
 
 *Source: https://keon.io/deep-q-learning*
 
-Now let's get build up an increasingly sophisticated method of playing this game.
+However this cart isn't moving! That's because we haven't taken any actions in the game yet. That's what we're about to do.
+
+### Taking Random Actions
+Let's get build up an increasingly sophisticated method of playing this game.
+
+To start off with, we're going to do something that's pretty unintelligent but it'll be a starting point. We're going to take random steps in the left or right direction.
 
 Modify the code in your file to the following:
 
@@ -98,7 +103,16 @@ However, before we dive deeper, it's important to understand that the `environme
 
 So now that we have learned the above, we're going to make use of these four variables one-by-one.
 
-First off, let's follow `gym`'s documentation instructions to use the `done` variable:
+# Using the `done` variable
+First off, let's follow `gym`'s documentation instructions to use the `done` variable.
+
+The `done` variable is set to `True` or `False` depending on what happens in the episode. `done` is `True` if:
+1. You **successfully** complete the episode by keeping the pole up for 200 consecutive steps.
+2. You **fail** the episode if the pole is more than 15 degrees from vertical (e.g., it's tilting too much), or the cart moves more than 2.4 units from the center.
+
+Else, the `done` variable is `False`.
+
+Now let's use it to `break` our loop if our program is `done`.
 
 ```python
 import gym
@@ -114,8 +128,9 @@ for step in range(1, 1001):
         break
 ```
 
-In Python the `break` command will exit the loop.
+> **NOTE**: In Python the `break` command will exit the loop.
 
+### Inspecting the `observation` variable
 Now, the `observation` variable is itself a list of 4 elements long. The elements are the following:
 
 `[position of cart, velocity of cart, angle of pole, rotation rate of pole]`
@@ -147,7 +162,8 @@ I've written the function for you below:
 import numpy as np
 
 def determine_action(observation, weights ):
-	action = 0 if np.dot(observation, weights) < 0 else 1 
+	weighted_sum = np.dot(observation, weights)
+	action = 0 if weighted_sum < 0 else 1 
 	return action
 ```
 
@@ -155,6 +171,7 @@ Cool.
 
 So now we can use this function to pick an action.
 
+### Picking Helpful Weights
 But wait a second. How do we pick weights?
 
 Well, just like with Neural Networks let's initialize these weights to random numbers and we'll "learn" the best weights later.
@@ -175,21 +192,21 @@ Using that let's write a function that basically tells us how much a set of weig
 ```python
 def run_episode(environment, weights):  
 	observation = environment.reset()
-	totalreward = 0
+	total_reward = 0
 	for step in range(200):
 		action = determine_action(observation, weights)
 		observation, reward, done, info = environment.step(action)
-		totalreward += reward
+		total_reward += reward
 		if done:
 			break
-	return totalreward
+	return total_reward
 ```
 
 Okay, so for a given set of weights we can calculate how "good" they are in our CartPole game.
 
 Now let's figure out a smart way to update our weights.
 
-### Randomly Searching
+### Randomly Searching for Better Weights
 *The below is from [Kevin Fran's post on "Simple Algorithms for Solving Cartpole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)*
 
 > One fairly straightforward strategy is to keep trying random weights, and pick the one that performs the best.
@@ -205,9 +222,6 @@ Now let's figure out a smart way to update our weights.
 >     if reward > best_reward:
 >        best_reward = reward
 >        best_weights = weights
->        # CartPole is considered solved if the agent lasts 200 timesteps
->        if reward == 200:
->            break
 > ```
 > 
 > Since the CartPole environment is relatively simple, with only 4 observations, this basic method works surprisingly well.
@@ -216,7 +230,7 @@ Now let's figure out a smart way to update our weights.
 > 
 > I ran the random search method 300 times, keeping track of how many episodes it took until the agent kept the pole up for 200 timesteps. On average, it took 13.53 episodes.
 
-### Using the best weights
+### Using the Best Weights We've Found
 Now that we've found the best weights, let's see if these weights help us solve cartpole.
 
 We're going to add run our program with these weights:
@@ -266,7 +280,7 @@ def run_episode(environment, weights):
     """
     observation = environment.reset()
     total_reward = 0
-    for _ in range(200):
+    for step in range(200):
         action = determine_action(observation, weights)
         observation, reward, done, info = environment.step(action)
         total_reward += reward
@@ -320,7 +334,7 @@ Run the above code a few times to see if you can successfully solve CartPole-V0!
 
 > **Note:** You may want to change the number of episodes to be higher so that you are searching over more possible weights.
 
-### Now What?
+### Now What? Are there better strategies?
 Okay, so that's how we can find the "best weights" when we're just searching randomly through the space of all possible weights? 
 
 Take a look at [Kevin Fran's tutorial](http://kvfrans.com/simple-algoritms-for-solving-cartpole/) and implement some of the other solutions.
